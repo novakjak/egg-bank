@@ -9,5 +9,6 @@ export default [
   ]),
   layout("dashboardLayout.tsx", [
     route("dashboard", "routes/dashboard.tsx"),
+    route("dashboard/account/:aid", "routes/account.tsx"),
   ]),
 ] satisfies RouteConfig;

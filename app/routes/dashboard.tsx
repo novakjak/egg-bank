@@ -1,7 +1,12 @@
-import { redirect } from "react-router";
-import { getSession } from '../sessions.server.ts';
+import { redirect, Link } from "react-router";
+import { getSession } from '../sessions.server';
+import { Account, User } from '../database.server';
+import { PlusIcon } from '@heroicons/react/24/solid'
 
-export async function loader({ request }) {
+import Error from '../components/Error';
+import type { Route } from './+types/dashboard';
+
+export async function loader({ request }: Route.LoaderArgs) {
   const session = await getSession(
     request.headers.get("Cookie"),
   );
@@ -9,8 +14,90 @@ export async function loader({ request }) {
     return redirect('/');
   }
   const uid = session.get('uid');
+  const user = await User.readById(uid!);
+  const accounts = await Account.readByUser(uid!);
+  return { user, accounts: accounts ?? [] }
 }
 
-export default function Dashboard() {
-  return ( <h1>hello</h1> )
+export async function action({
+  request,
+}: Route.ActionArgs) {
+  const session = await getSession(
+    request.headers.get("Cookie"),
+  );
+  const formData = await request.formData();
+
+  const uid = session.get('uid');
+  let name = formData.get("name") as string;
+  if (name.length > 50) {
+    return { error: true, message: 'Name is too long' };
+  }
+  const type = formData.get("type") as string;
+  if (!name) {
+    switch (type) {
+      case 'basic':
+        name = 'Basic account'
+        break;
+      case 'savings':
+        name = 'Savings account'
+        break;
+      default:
+        return { error: true, message: 'Unknown account type' }
+    }
+  }
+  try {
+    await Account.create(uid!, name, type)
+  } catch (e) {
+    console.log(e)
+    return { error: true, message: e.toString() }
+  }
+}
+
+export default function Dashboard({ loaderData, actionData }: Route.ComponentProps) {
+  const user = loaderData.user;
+  const accounts = loaderData.accounts;
+  const totalFunds = accounts.reduce((sum, acc) => sum + acc.balance, 0)
+  return (
+    <>
+      <Error error={actionData?.error} message={actionData?.message} />
+      <h1>Welcome back {user.name}!</h1>
+      <div className='flex flex-row gap-3 flex-wrap justify-around mb-[1rem]'>
+        {accounts.map(a => (
+          <Link to={"/dashboard/account/" + a.number} className="account" key={a.id}>
+            <p>{a.name}</p>
+            <p className="neutral-800">{a.type}</p>
+            <p className="text-center egg">{a.balance}</p>
+          </Link>
+        ))}
+        <button commandfor="popover" command="show-popover" className="account justify-center" to="/create/account">
+          <PlusIcon className="size-6 self-center" />
+          <p className="text-center">Open account</p>
+        </button>
+        <div id="popover" popover="auto">
+          <div id="popovercontent">
+            <button className="closebutton" commandfor="popover" command="hide-popover">Close</button>
+            <form method="post">
+              <label htmlFor="name">Account name (leave empty for default):</label>
+              <input name="name" id="name" type="text" maxlength="50" />
+              <legend>Account type:</legend>
+              <ul className="flex flex-row justify-start gap-10">
+                <li className="flex flex-row gap-3">
+                  <input type="radio" id="basic" name="type" value="basic" required />
+                  <label htmlFor="basic">Basic</label>
+                </li>
+                <li className="flex flex-row gap-3">
+                  <input type="radio" id="savings" name="type" value="savings" required />
+                  <label htmlFor="savings">Savings</label>
+                </li>
+              </ul>
+              <button type="submit">Register</button>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div id="overview">
+        <p className="egg">Your total funds are {totalFunds.toFixed(3)}</p>
+      </div>
+    </>
+  );
 }

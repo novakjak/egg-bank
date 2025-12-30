@@ -1,9 +1,9 @@
 import { createCookieSessionStorage } from "react-router";
 
-import { User } from "./database.server.ts";
+import { User } from "./database.server";
 
 type SessionData = {
-  uid: int;
+  uid: number;
 };
 
 type SessionFlashData = {
@@ -15,7 +15,7 @@ const { getSession, commitSession, destroySession } =
     {
       cookie: {
         name: "__session",
-        maxAge: 120,
+        maxAge: 120 * 60,
       }
     }
   );

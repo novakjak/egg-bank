@@ -7,7 +7,7 @@ export default function Layout() {
   return (
     <>
       <header className="flex p-5 justify-between">
-        <Link to="/"><h1>🥚 Egg bank - dashboard</h1></Link>
+        <Link to="/dashboard">🥚 Egg Bank - dashboard</Link>
         <div className="flex justify-around ">
           <Link to="/logout">Logout</Link>
         </div>

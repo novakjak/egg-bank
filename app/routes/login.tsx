@@ -1,12 +1,13 @@
-import type { ActionFunctionArgs } from "react-router";
-import { redirect } from "react-router";
+import { redirect, data } from "react-router";
 
-import { Db } from '../database.server.ts';
-import { getSession, commitSession } from '../sessions.server.ts';
+import { Db } from '../database.server';
+import { getSession, commitSession, destroySession } from '../sessions.server';
+import Error from '../components/Error';
+import type { Route } from './+types/login';
 
 export async function action({
   request,
-}: ActionFunctionArgs) {
+}: Route.ActionArgs) {
   const session = await getSession(
     request.headers.get("Cookie"),
   );
@@ -14,17 +15,32 @@ export async function action({
   const name = formData.get("name") as string;
   const password = formData.get("password") as string;
 
-  const authed = await Db.auth(name, password);
-
-  if (!authed) {
-    return redirect('/', {
+  if (name.length > 50) {
+    return data({ error: true, message: "Name is too long."}, {
       headers: {
-        'Set-Cookie': await commitSession(session),
+        'Set-Cookie': await destroySession(session),
+      }
+    });
+  }
+  if (password.length > 50) {
+    return data({ error: true, message: "Password is too long."}, {
+      headers: {
+        'Set-Cookie': await destroySession(session),
       }
     });
   }
 
-  session.set('uid', authed)
+  const authed = await Db.auth(name, password);
+
+  if (!authed) {
+    return data({ error: true, message: "User does not exists or you entered wrong password."}, {
+      headers: {
+        'Set-Cookie': await destroySession(session),
+      }
+    });
+  }
+
+  session.set('uid', authed);
   return redirect('/dashboard', {
     headers: {
       'Set-Cookie': await commitSession(session),
@@ -32,13 +48,14 @@ export async function action({
   });
 }
 
-export default function Login() {
+export default function Login({ actionData }: Route.ComponentProps) {
   return (
     <form method="post" className="flex flex-col">
+      <Error error={actionData?.error} message={actionData?.message} />
       <label htmlFor="name">Name:</label>
-      <input id="name" name="name" required />
+      <input id="name" name="name" maxlength="50" required />
       <label htmlFor="password">Password:</label>
-      <input id="password" name="password" type="password" required />
+      <input id="password" name="password" type="password" maxlength="50" required />
       <button type="submit">Login</button>
     </form>
   );

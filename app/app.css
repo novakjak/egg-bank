@@ -7,21 +7,64 @@
 
 html,
 body {
-  @apply bg-yellow-50 dark:bg-stone-900;
-
-  @media (prefers-color-scheme: dark) {
-    color-scheme: dark;
-  }
+  @apply bg-yellow-50;
 }
 
 button {
-  @apply bg-zinc-400 dark:bg-stone-400;
+  @apply bg-zinc-400;
   @apply rounded-md;
+  @apply p-1;
+}
+
+form {
+  @apply flex flex-col;
+}
+
+#popovercontent > form {
+  @apply gap-3;
 }
 
 form > input {
-  @apply bg-yellow-400;
-  @apply outline-yellow-300;
-  @apply focus:outline-3;
-  @apply mb-3;
+  @apply bg-yellow-400 outline-yellow-300 focus:outline-3 mb-3;
+}
+
+h1 {
+  @apply text-3xl mb-[1rem];
+}
+
+.account {
+  @apply flex flex-col bg-orange-200 rounded-lg p-3;
+}
+
+.closebutton {
+  @apply place-self-end absolute;
+}
+
+.payment {
+  @apply border-[0.2rem] border-solid rounded-md;
+  @apply grid grid-cols-[auto_auto_1fr_2fr_2fr_2fr] gap-[1rem];
+  @apply my-[0.5rem];
+}
+
+.incoming {
+  @apply border-green-400;
+  @apply bg-green-200;
+}
+
+.outgoing {
+  @apply border-red-400;
+  @apply bg-red-200;
+}
+
+.egg::after {
+  content: " 🥚";
+}
+
+#popover {
+  @apply bg-black w-screen h-screen absolute top-0 left-0 pt-[10vh];
+  background-color: #20202080;
+}
+
+#popovercontent  {
+  @apply bg-neutral-100 w-1/2 mx-auto flex flex-col p-[1rem] rounded-lg;
 }

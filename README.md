@@ -8,15 +8,16 @@
 1. Execute script within `database.sql` in SQL Server Management Studio.
    - This will create the database on its own, you do not need to do it manually.
 1. Update configuration options in the `.env` file.
-   - For all configuration options see [config](#config).
+   - For all configuration options see [configuration](#configuration).
 1. Install dependencies with `npm install`.
 1. Run the server with `npm run dev`.
    - This will make the server accessible on port 5173 meaning that you can connect to it
      in a web browser on the address <http://localhost:5173>.
 
-## Config
+## Configuration
 
-All configuration is stored in the file `.env` in the project directory.
+All configuration is stored in the file `.env` in the project directory. Configuration is written
+in the format of `KEY=value` with each key-value pair being on its own line.
 
 | Config key | Data type | Explanation | Example |
 | ---------- | --------- | ----------- | ------- |

@@ -1,0 +1,92 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Linux x86_64; rv:145.0) Gecko/20100101 Firefox/145.0" version="29.2.9">
+  <diagram name="Page-1" id="e7e014a7-5840-1c2e-5031-d8a46d1fe8dd">
+    <mxGraphModel dx="1558" dy="891" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="826" background="none" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="rpiXigg8ACy2PUiKh8JA-44" parent="1" style="ellipse;html=1;shape=startState;fillColor=#000000;strokeColor=#ff0000;" value="" vertex="1">
+          <mxGeometry height="30" width="30" x="520" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="rpiXigg8ACy2PUiKh8JA-45" edge="1" parent="1" source="rpiXigg8ACy2PUiKh8JA-44" style="edgeStyle=orthogonalEdgeStyle;html=1;verticalAlign=bottom;endArrow=open;endSize=8;strokeColor=#ff0000;rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="rpiXigg8ACy2PUiKh8JA-46" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="535" y="150" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rpiXigg8ACy2PUiKh8JA-50" edge="1" parent="1" source="rpiXigg8ACy2PUiKh8JA-46" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="rpiXigg8ACy2PUiKh8JA-47">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rpiXigg8ACy2PUiKh8JA-46" parent="1" style="html=1;align=center;verticalAlign=middle;rounded=1;absoluteArcSize=1;arcSize=10;dashed=0;whiteSpace=wrap;" value="Uživatel zadá registrační údaje" vertex="1">
+          <mxGeometry height="70" width="140" x="465" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="rpiXigg8ACy2PUiKh8JA-51" edge="1" parent="1" source="rpiXigg8ACy2PUiKh8JA-47" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#FF0000;endArrow=open;endFill=0;endSize=8;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="rpiXigg8ACy2PUiKh8JA-54">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="430" y="310" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rpiXigg8ACy2PUiKh8JA-52" connectable="0" parent="rpiXigg8ACy2PUiKh8JA-51" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="&lt;div&gt;Ano&lt;/div&gt;" vertex="1">
+          <mxGeometry relative="1" x="-0.596" y="1" as="geometry">
+            <mxPoint x="12" y="-11" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rpiXigg8ACy2PUiKh8JA-47" parent="1" style="rhombus;whiteSpace=wrap;html=1;fontColor=#000000;fillColor=#ffffc0;strokeColor=#ff0000;" value="&lt;div&gt;Existuje uživatel se zadaným jménem?&lt;/div&gt;" vertex="1">
+          <mxGeometry height="140" width="155" x="457.5" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="rpiXigg8ACy2PUiKh8JA-48" edge="1" parent="1" source="rpiXigg8ACy2PUiKh8JA-47" style="edgeStyle=orthogonalEdgeStyle;html=1;align=left;verticalAlign=bottom;endArrow=open;endSize=8;strokeColor=#ff0000;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="rpiXigg8ACy2PUiKh8JA-58" value="&lt;div&gt;Ne&lt;/div&gt;">
+          <mxGeometry relative="1" x="-1" as="geometry">
+            <Array as="points">
+              <mxPoint x="675" y="310" />
+            </Array>
+            <mxPoint x="680" y="340" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rpiXigg8ACy2PUiKh8JA-57" edge="1" parent="1" source="rpiXigg8ACy2PUiKh8JA-54" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endSize=8;strokeColor=#FF0000;endArrow=open;endFill=0;" target="rpiXigg8ACy2PUiKh8JA-56">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rpiXigg8ACy2PUiKh8JA-54" parent="1" style="html=1;align=center;verticalAlign=middle;rounded=1;absoluteArcSize=1;arcSize=10;dashed=0;whiteSpace=wrap;" value="Vytvoří se nový uživatel v databázi" vertex="1">
+          <mxGeometry height="70" width="140" x="310" y="380" as="geometry" />
+        </mxCell>
+        <mxCell id="rpiXigg8ACy2PUiKh8JA-60" edge="1" parent="1" source="rpiXigg8ACy2PUiKh8JA-56" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endSize=8;endArrow=open;endFill=0;strokeColor=#FF0000;" target="rpiXigg8ACy2PUiKh8JA-59">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rpiXigg8ACy2PUiKh8JA-56" parent="1" style="html=1;align=center;verticalAlign=middle;rounded=1;absoluteArcSize=1;arcSize=10;dashed=0;whiteSpace=wrap;" value="Systém přihlásí uživatele" vertex="1">
+          <mxGeometry height="70" width="140" x="310" y="480" as="geometry" />
+        </mxCell>
+        <mxCell id="rpiXigg8ACy2PUiKh8JA-58" parent="1" style="html=1;align=center;verticalAlign=middle;rounded=1;absoluteArcSize=1;arcSize=10;dashed=0;whiteSpace=wrap;" value="Zobrazí se chybová hláška" vertex="1">
+          <mxGeometry height="70" width="140" x="605" y="380" as="geometry" />
+        </mxCell>
+        <mxCell id="rpiXigg8ACy2PUiKh8JA-59" parent="1" style="html=1;align=center;verticalAlign=middle;rounded=1;absoluteArcSize=1;arcSize=10;dashed=0;whiteSpace=wrap;" value="Otevře se dashboard" vertex="1">
+          <mxGeometry height="70" width="140" x="310" y="580" as="geometry" />
+        </mxCell>
+        <mxCell id="rpiXigg8ACy2PUiKh8JA-61" parent="1" style="ellipse;html=1;shape=endState;fillColor=#000000;strokeColor=#ff0000;" value="" vertex="1">
+          <mxGeometry height="30" width="30" x="520" y="770" as="geometry" />
+        </mxCell>
+        <mxCell id="rpiXigg8ACy2PUiKh8JA-62" parent="1" style="shape=line;html=1;strokeWidth=6;strokeColor=#ff0000;" value="" vertex="1">
+          <mxGeometry height="10" width="200" x="435" y="690" as="geometry" />
+        </mxCell>
+        <mxCell id="rpiXigg8ACy2PUiKh8JA-63" edge="1" parent="1" source="rpiXigg8ACy2PUiKh8JA-62" style="edgeStyle=orthogonalEdgeStyle;html=1;verticalAlign=bottom;endArrow=open;endSize=8;strokeColor=#ff0000;rounded=0;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="535" y="770" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rpiXigg8ACy2PUiKh8JA-64" edge="1" parent="1" source="rpiXigg8ACy2PUiKh8JA-59" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endSize=8;endArrow=open;endFill=0;strokeColor=#FF0000;" target="rpiXigg8ACy2PUiKh8JA-62">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="380" y="670" />
+              <mxPoint x="490" y="670" />
+            </Array>
+            <mxPoint x="490" y="690" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rpiXigg8ACy2PUiKh8JA-65" edge="1" parent="1" source="rpiXigg8ACy2PUiKh8JA-58" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#FF0000;strokeWidth=1;endSize=8;endArrow=open;endFill=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="680" y="670" />
+              <mxPoint x="586" y="670" />
+            </Array>
+            <mxPoint x="586" y="690" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

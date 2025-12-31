@@ -46,6 +46,10 @@ create table log (
 
 go
 
+create view interest as select id, balance * 0.001 as interest from account where type = 'savings' and status = 'active';
+
+go
+
 insert into users (name, password, admin) values ('admin', 'Hunter12', 'true'), ('Egg Bank', '*******', 'true'), ('karel', 'karel', 'false');
 insert into account (user_id, number, name, type, status, balance) values (2, 1, 'Egg Bank', 'basic', 'active', 0);
 insert into log_msg_type (type) values ('user created'), ('user deleted'), ('account opened'), ('account closed'), ('transferred funds'), ('added funds');
@@ -127,12 +131,41 @@ as begin
 
     insert into account (user_id, name, number, type, status) values (@user, @name, @number, @type, 'active');
     set @account_id = (select SCOPE_IDENTITY());
+    -- Give first account bonus to user
     if @number = 1 begin
         execute add_funds @to = 1, @amount = 50;
         execute transfer @from = 1, @to = @account_id, @amount = 50, @message = 'A gift for first time Egg Bank users';
     end
     commit transaction;
 end;
+
+go
+
+create or alter procedure add_interest
+as begin
+    begin transaction;
+    declare @total_interest decimal(38,3) = (select sum(interest) from interest);
+    execute add_funds @to = 1, @amount = @total_interest;
+
+    drop table if exists #interest_temp;
+    declare @account_id int;
+
+    select * into #interest_temp from interest;
+
+    select top 1 @account_id = id from #interest_temp;
+    while @@rowcount <> 0
+    begin
+        declare @interest decimal(38,3) = (select interest from #interest_temp where id = @account_id);
+        if @interest > 0 begin
+            execute transfer @from = 1, @to = @account_id, @amount = @interest, @message = 'Added interest';
+        end
+        delete from #interest_temp where id = @account_id;
+        select top 1 @account_id = id from #interest_temp;
+    end
+
+    drop table #interest_temp;
+    commit;
+end
 
 go
 
@@ -154,7 +187,7 @@ go
 execute sp_add_jobstep
     @job_name = 'Add funds to savings accounts',
     @step_name = 'Increase account balance',
-    @command = 'update account set balance = balance * 1.001 where type = ''savings'' and status = ''active'';',
+    @command = 'execute add_interest',
     @database_name = 'egg_bank',
     @retry_attempts = 3;
 go

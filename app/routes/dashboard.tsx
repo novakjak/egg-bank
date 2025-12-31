@@ -1,6 +1,6 @@
 import { redirect, Link } from "react-router";
 import { getSession } from '../sessions.server';
-import { Account, User } from '../database.server';
+import { Account, User, Payment } from '../database.server';
 import { PlusIcon } from '@heroicons/react/24/solid'
 
 import Error from '../components/Error';
@@ -16,7 +16,19 @@ export async function loader({ request }: Route.LoaderArgs) {
   const uid = session.get('uid');
   const user = await User.readById(uid!);
   const accounts = await Account.readByUser(uid!);
-  return { user, accounts: accounts ?? [] }
+  let totalInterest = 0
+  for (const a of accounts) {
+    if (a.type !== 'savings') {
+      continue;
+    }
+    const payments = await Payment.readByAccount(uid!, a.number);
+    for (const p of payments) {
+      if (p.from.user.name === 'Egg Bank') {
+        totalInterest += p.amount;
+      } 
+    }
+  }
+  return { user, accounts: accounts ?? [], totalInterest }
 }
 
 export async function action({
@@ -57,6 +69,7 @@ export default function Dashboard({ loaderData, actionData }: Route.ComponentPro
   const user = loaderData.user;
   const accounts = loaderData.accounts;
   const totalFunds = accounts.reduce((sum, acc) => sum + acc.balance, 0)
+  const totalInterest = loaderData.totalInterest;
   return (
     <>
       <Error error={actionData?.error} message={actionData?.message} />
@@ -78,7 +91,7 @@ export default function Dashboard({ loaderData, actionData }: Route.ComponentPro
             <button className="closebutton" commandfor="popover" command="hide-popover">Close</button>
             <form method="post">
               <label htmlFor="name">Account name (leave empty for default):</label>
-              <input name="name" id="name" type="text" maxlength="50" />
+              <input name="name" id="name" type="text" maxLength="50" />
               <legend>Account type:</legend>
               <ul className="flex flex-row justify-start gap-10">
                 <li className="flex flex-row gap-3">
@@ -97,6 +110,7 @@ export default function Dashboard({ loaderData, actionData }: Route.ComponentPro
       </div>
       <div id="overview">
         <p className="egg">Your total funds are {totalFunds.toFixed(3)}</p>
+        {totalInterest > 0 ? <p>You've made a total of <span className="egg">{totalInterest.toFixed(3)}</span> on interest!</p> : null}
       </div>
     </>
   );

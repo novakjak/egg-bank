@@ -1,0 +1,116 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Linux x86_64; rv:145.0) Gecko/20100101 Firefox/145.0" version="29.2.9">
+  <diagram name="Page-1" id="nbL_eBZCeZ5dbJ7FkG3f">
+    <mxGraphModel dx="1753" dy="1003" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="Uafs6m1cZE1Ywly-BPEc-1" parent="1" style="ellipse;html=1;shape=startState;fillColor=#000000;strokeColor=#ff0000;" value="" vertex="1">
+          <mxGeometry height="30" width="30" x="399" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="Uafs6m1cZE1Ywly-BPEc-2" edge="1" parent="1" source="Uafs6m1cZE1Ywly-BPEc-1" style="edgeStyle=orthogonalEdgeStyle;html=1;verticalAlign=bottom;endArrow=open;endSize=8;strokeColor=#ff0000;rounded=0;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="414" y="120" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Uafs6m1cZE1Ywly-BPEc-7" edge="1" parent="1" source="Uafs6m1cZE1Ywly-BPEc-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=open;endFill=0;endSize=8;strokeColor=#FF0000;" target="Uafs6m1cZE1Ywly-BPEc-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Uafs6m1cZE1Ywly-BPEc-3" parent="1" style="html=1;align=center;verticalAlign=middle;rounded=1;absoluteArcSize=1;arcSize=10;dashed=0;whiteSpace=wrap;" value="Uživatel zadá požadavek na převod peněz" vertex="1">
+          <mxGeometry height="70" width="140" x="344" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="Uafs6m1cZE1Ywly-BPEc-11" edge="1" parent="1" source="Uafs6m1cZE1Ywly-BPEc-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=open;endFill=0;endSize=8;strokeColor=#FF0000;" target="Uafs6m1cZE1Ywly-BPEc-8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Uafs6m1cZE1Ywly-BPEc-14" connectable="0" parent="Uafs6m1cZE1Ywly-BPEc-11" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="Ano" vertex="1">
+          <mxGeometry relative="1" x="-0.7189" y="-2" as="geometry">
+            <mxPoint x="17" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Uafs6m1cZE1Ywly-BPEc-4" parent="1" style="rhombus;whiteSpace=wrap;html=1;fontColor=#000000;fillColor=#ffffc0;strokeColor=#ff0000;" value="Existuje cílový účet?" vertex="1">
+          <mxGeometry height="70" width="136" x="346" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="Uafs6m1cZE1Ywly-BPEc-5" edge="1" parent="1" source="Uafs6m1cZE1Ywly-BPEc-4" style="edgeStyle=orthogonalEdgeStyle;html=1;align=left;verticalAlign=bottom;endArrow=open;endSize=8;strokeColor=#ff0000;rounded=0;" target="Uafs6m1cZE1Ywly-BPEc-13" value="Ne">
+          <mxGeometry relative="1" x="-1" as="geometry">
+            <Array as="points">
+              <mxPoint x="530" y="255" />
+              <mxPoint x="530" y="255" />
+            </Array>
+            <mxPoint x="520" y="270" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Uafs6m1cZE1Ywly-BPEc-8" parent="1" style="rhombus;whiteSpace=wrap;html=1;fontColor=#000000;fillColor=#ffffc0;strokeColor=#ff0000;" value="&lt;div&gt;Má uživatel&amp;nbsp;&lt;/div&gt;&lt;div&gt;dostatek peněz?&lt;/div&gt;" vertex="1">
+          <mxGeometry height="70" width="128" x="350" y="320" as="geometry" />
+        </mxCell>
+        <mxCell id="Uafs6m1cZE1Ywly-BPEc-9" edge="1" parent="1" source="Uafs6m1cZE1Ywly-BPEc-8" style="edgeStyle=orthogonalEdgeStyle;html=1;align=left;verticalAlign=bottom;endArrow=open;endSize=8;strokeColor=#ff0000;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" target="Uafs6m1cZE1Ywly-BPEc-13" value="Ne">
+          <mxGeometry relative="1" x="-1" as="geometry">
+            <Array as="points">
+              <mxPoint x="510" y="355" />
+              <mxPoint x="510" y="355" />
+            </Array>
+            <mxPoint x="530" y="340" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Uafs6m1cZE1Ywly-BPEc-10" edge="1" parent="1" source="Uafs6m1cZE1Ywly-BPEc-8" style="edgeStyle=orthogonalEdgeStyle;html=1;align=left;verticalAlign=top;endArrow=open;endSize=8;strokeColor=#ff0000;rounded=0;" value="Ano">
+          <mxGeometry relative="1" x="-1" as="geometry">
+            <Array as="points">
+              <mxPoint x="414" y="430" />
+            </Array>
+            <mxPoint x="414" y="430" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Uafs6m1cZE1Ywly-BPEc-27" edge="1" parent="1" source="Uafs6m1cZE1Ywly-BPEc-12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endSize=8;endArrow=open;endFill=0;strokeColor=#FF0000;" target="Uafs6m1cZE1Ywly-BPEc-25">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Uafs6m1cZE1Ywly-BPEc-12" parent="1" style="html=1;align=center;verticalAlign=middle;rounded=1;absoluteArcSize=1;arcSize=10;dashed=0;whiteSpace=wrap;" value="Transakce se zanese do databáze" vertex="1">
+          <mxGeometry height="70" width="140" x="344" y="430" as="geometry" />
+        </mxCell>
+        <mxCell id="Uafs6m1cZE1Ywly-BPEc-17" edge="1" parent="1" source="Uafs6m1cZE1Ywly-BPEc-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=open;endFill=0;endSize=8;strokeColor=#FF0000;" target="Uafs6m1cZE1Ywly-BPEc-16">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Uafs6m1cZE1Ywly-BPEc-13" parent="1" style="shape=line;html=1;strokeWidth=6;strokeColor=#ff0000;direction=south;" value="" vertex="1">
+          <mxGeometry height="200" width="10" x="540" y="210" as="geometry" />
+        </mxCell>
+        <mxCell id="Uafs6m1cZE1Ywly-BPEc-15" parent="1" style="html=1;align=center;verticalAlign=middle;rounded=1;absoluteArcSize=1;arcSize=10;dashed=0;whiteSpace=wrap;" value="Zobrazí se chybová hláška" vertex="1">
+          <mxGeometry height="70" width="140" x="560" y="530" as="geometry" />
+        </mxCell>
+        <mxCell id="Uafs6m1cZE1Ywly-BPEc-18" edge="1" parent="1" source="Uafs6m1cZE1Ywly-BPEc-16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=open;endFill=0;endSize=8;strokeColor=#FF0000;" target="Uafs6m1cZE1Ywly-BPEc-15">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Uafs6m1cZE1Ywly-BPEc-16" parent="1" style="html=1;align=center;verticalAlign=middle;rounded=1;absoluteArcSize=1;arcSize=10;dashed=0;whiteSpace=wrap;" value="Transakce se zruší" vertex="1">
+          <mxGeometry height="70" width="140" x="560" y="430" as="geometry" />
+        </mxCell>
+        <mxCell id="Uafs6m1cZE1Ywly-BPEc-24" edge="1" parent="1" source="Uafs6m1cZE1Ywly-BPEc-19" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=open;endFill=0;endSize=8;strokeColor=#FF0000;" target="Uafs6m1cZE1Ywly-BPEc-23">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Uafs6m1cZE1Ywly-BPEc-19" parent="1" style="shape=line;html=1;strokeWidth=6;strokeColor=#ff0000;" value="" vertex="1">
+          <mxGeometry height="10" width="200" x="429" y="760" as="geometry" />
+        </mxCell>
+        <mxCell id="Uafs6m1cZE1Ywly-BPEc-21" edge="1" parent="1" source="Uafs6m1cZE1Ywly-BPEc-15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=open;endFill=0;endSize=8;strokeColor=#FF0000;entryX=0.755;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;" target="Uafs6m1cZE1Ywly-BPEc-19">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="579" y="640" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Uafs6m1cZE1Ywly-BPEc-23" parent="1" style="ellipse;html=1;shape=endState;fillColor=#000000;strokeColor=#ff0000;" value="" vertex="1">
+          <mxGeometry height="30" width="30" x="514" y="810" as="geometry" />
+        </mxCell>
+        <mxCell id="Uafs6m1cZE1Ywly-BPEc-28" edge="1" parent="1" source="Uafs6m1cZE1Ywly-BPEc-25" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endSize=8;endArrow=open;endFill=0;strokeColor=#FF0000;" target="Uafs6m1cZE1Ywly-BPEc-26">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="414" y="630" />
+              <mxPoint x="414" y="630" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Uafs6m1cZE1Ywly-BPEc-25" parent="1" style="html=1;align=center;verticalAlign=middle;rounded=1;absoluteArcSize=1;arcSize=10;dashed=0;whiteSpace=wrap;" value="Peníze se přičtou cílovému účtu" vertex="1">
+          <mxGeometry height="70" width="140" x="344" y="530" as="geometry" />
+        </mxCell>
+        <mxCell id="Uafs6m1cZE1Ywly-BPEc-26" parent="1" style="html=1;align=center;verticalAlign=middle;rounded=1;absoluteArcSize=1;arcSize=10;dashed=0;whiteSpace=wrap;" value="Peníze se odečtou od počátečního účtu" vertex="1">
+          <mxGeometry height="70" width="140" x="344" y="630" as="geometry" />
+        </mxCell>
+        <mxCell id="Uafs6m1cZE1Ywly-BPEc-29" edge="1" parent="1" source="Uafs6m1cZE1Ywly-BPEc-26" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.255;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;endSize=8;endArrow=open;endFill=0;strokeColor=#FF0000;" target="Uafs6m1cZE1Ywly-BPEc-19">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -95,7 +95,7 @@
         <mxCell id="A7M9qnBKFpEmrPqXtPCV-33" parent="1" style="ellipse;html=1;shape=endState;fillColor=#000000;strokeColor=#ff0000;" value="" vertex="1">
           <mxGeometry height="30" width="30" x="421" y="680" as="geometry" />
         </mxCell>
-        <mxCell id="A7M9qnBKFpEmrPqXtPCV-34" edge="1" parent="1" source="A7M9qnBKFpEmrPqXtPCV-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.519;entryY=-0.001;entryDx=0;entryDy=0;entryPerimeter=0;" target="A7M9qnBKFpEmrPqXtPCV-21">
+        <mxCell id="A7M9qnBKFpEmrPqXtPCV-34" edge="1" parent="1" source="A7M9qnBKFpEmrPqXtPCV-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.519;entryY=-0.001;entryDx=0;entryDy=0;entryPerimeter=0;endSize=8;endArrow=open;endFill=0;strokeColor=#FF0000;" target="A7M9qnBKFpEmrPqXtPCV-21">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
       </root>

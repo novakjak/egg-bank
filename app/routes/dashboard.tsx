@@ -59,14 +59,14 @@ export async function action({
   }
   try {
     await Account.create(uid!, name, type)
-  } catch (e) {
+  } catch (e: any) {
     console.log(e)
     return { error: true, message: e.toString() }
   }
 }
 
 export default function Dashboard({ loaderData, actionData }: Route.ComponentProps) {
-  const user = loaderData.user;
+  const user = loaderData.user!;
   const accounts = loaderData.accounts;
   const totalFunds = accounts.reduce((sum, acc) => sum + acc.balance, 0)
   const totalInterest = loaderData.totalInterest;
@@ -82,16 +82,16 @@ export default function Dashboard({ loaderData, actionData }: Route.ComponentPro
             <p className="text-center egg">{a.balance}</p>
           </Link>
         ))}
-        <button commandfor="popover" command="show-popover" className="account justify-center" to="/create/account">
+        <button popoverTarget="popover" popoverTargetAction="show" className="account justify-center">
           <PlusIcon className="size-6 self-center" />
           <p className="text-center">Open account</p>
         </button>
         <div id="popover" popover="auto">
           <div id="popovercontent">
-            <button className="closebutton" commandfor="popover" command="hide-popover">Close</button>
+            <button className="closebutton" popoverTarget="popover" popoverTargetAction="hide">Close</button>
             <form method="post">
               <label htmlFor="name">Account name (leave empty for default):</label>
-              <input name="name" id="name" type="text" maxLength="50" />
+              <input name="name" id="name" type="text" maxLength={50} />
               <legend>Account type:</legend>
               <ul className="flex flex-row justify-start gap-10">
                 <li className="flex flex-row gap-3">

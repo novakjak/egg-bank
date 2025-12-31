@@ -1,13 +1,13 @@
 drop database if exists egg_bank;
 go
-create database egg_bank;
+create database egg_bank collate Latin1_General_CS_AS_KS_WS;
 go
 use egg_bank;
 
 create table users (
     id int identity(1,1) primary key,
-    name nvarchar(50) not null unique,
-    password nvarchar(50) not null,
+    name varchar(50) not null unique,
+    password varchar(50) not null,
     admin bit not null default(0),
 );
 
@@ -15,16 +15,16 @@ create table account (
     id int identity(1,1) primary key,
     user_id int foreign key references users(id) not null,
     number int not null check(number > 0),
-    name nvarchar(50) not null,
-    type nvarchar(30) not null default('basic') check(type in ('basic', 'savings')),
-    status nvarchar(15) not null check(status in ('active', 'disabled')),
+    name varchar(50) not null,
+    type varchar(30) not null default('basic') check(type in ('basic', 'savings')),
+    status varchar(15) not null check(status in ('active', 'disabled')),
     balance decimal(38, 3) not null default(0.0),
 );
 
 create table payment (
     id int identity(1,1) primary key,
     timestamp datetime not null default(getdate()),
-    description nvarchar(50) null,
+    description varchar(50) null,
     from_acc int foreign key references account(id) not null,
     to_acc int foreign key references account(id) not null,
     amount decimal(38, 3) not null check(amount > 0),
@@ -32,21 +32,21 @@ create table payment (
 
 create table log_msg_type (
     id int identity(1,1) primary key,
-    type nvarchar(30) not null unique,
+    type varchar(30) not null unique,
 );
 
 create table log (
     id int identity(1,1) primary key,
     timestamp datetime not null default(getdate()),
     type int foreign key references log_msg_type(id) not null,
-    message nvarchar(50) not null,
+    message varchar(50) not null,
     user_id int null default(null),
     account int null default(null),
 );
 
 go
 
-create view interest as select id, balance * 0.001 as interest from account where type = 'savings' and status = 'active';
+create view interest as select id, balance * 0.005 as interest from account where type = 'savings' and status = 'active';
 
 go
 
@@ -73,15 +73,15 @@ end
 go
 
 create or alter procedure auth_user
-    @name nvarchar(50), @password nvarchar(50), @authed int out
+    @name varchar(50), @password varchar(50), @authed int out, @admin bit out
 as begin
-    set @authed = (select id from users where name = @name and password = @password);
+    select @authed = id, @admin = admin from users where name = @name and password = @password;
 end;
 
 go
 
 create or alter procedure transfer
-    @from int, @to int, @amount decimal(38,3), @message nvarchar(50) = null
+    @from int, @to int, @amount decimal(38,3), @message varchar(50) = null
 as begin
     begin transaction;
     declare @usable_funds decimal(38,3) = (select balance from account where id = @from);
@@ -98,7 +98,7 @@ as begin
     declare @log_msg_type int = (select id from log_msg_type where type = 'transferred funds');
     insert into log (type, message, user_id, account)
         values (@log_msg_type,
-            'transferred ' + cast(@amount as nvarchar) + ' from ' + cast(@from as nvarchar) + ' to ' + cast(@to as nvarchar),
+            'transferred ' + cast(@amount as varchar) + ' from ' + cast(@from as varchar) + ' to ' + cast(@to as varchar),
             @user_id,
             @from);
     commit transaction;
@@ -116,14 +116,14 @@ as begin
     declare @user_id int = (select user_id from account where id = @to);
     declare @log_msg_type int = (select id from log_msg_type where type = 'added funds');
     insert into log (type, message, user_id, account)
-        values (@log_msg_type, 'added ' + cast(@amount as nvarchar) + ' to account', @user_id, @to);
+        values (@log_msg_type, 'added ' + cast(@amount as varchar) + ' to account', @user_id, @to);
     commit transaction;
 end;
 
 go
 
 create or alter procedure open_account
-    @user int, @name nvarchar(50), @type nvarchar(20), @account_id int out
+    @user int, @name varchar(50), @type varchar(20), @account_id int out
 as begin
     begin transaction;
 
@@ -145,6 +145,10 @@ create or alter procedure add_interest
 as begin
     begin transaction;
     declare @total_interest decimal(38,3) = (select sum(interest) from interest);
+    if @total_interest = 0.0 begin
+        rollback;
+        return; -- early return since there's no interest to add
+    end
     execute add_funds @to = 1, @amount = @total_interest;
 
     drop table if exists #interest_temp;
@@ -192,16 +196,16 @@ execute sp_add_jobstep
     @retry_attempts = 3;
 go
 execute sp_add_schedule
-    @schedule_name = 'EveryMinute',
+    @schedule_name = 'Every5Minutes',
     @freq_type = 4, -- dayly
     @freq_interval = 1, -- 1 day
     @freq_subday_type = 4, -- minutes
-    @freq_subday_interval = 1; -- 1 minute
+    @freq_subday_interval = 5; -- 5 minutes
 
 go
 execute sp_attach_schedule
     @job_name = 'Add funds to savings accounts',
-    @schedule_name = 'EveryMinute';
+    @schedule_name = 'Every5Minutes';
 go
 execute sp_add_jobserver @job_name = 'Add funds to savings accounts';
 go

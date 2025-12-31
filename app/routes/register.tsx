@@ -27,7 +27,7 @@ export async function action({
   try {
     const user = new User(name, password);
     await user.save();
-    session.set('uid', user.id);
+    session.set('uid', user.id!);
   } catch (e) {
     return { error: true, message: 'A user with such name already exists.' }
   }
@@ -44,9 +44,9 @@ export default function Register({ actionData }: Route.ComponentProps) {
     <form method="post" className="flex flex-col">
       <Error error={actionData?.error} message={actionData?.message} />
       <label htmlFor="name">Name:</label>
-      <input id="name" name="name" maxLength="50" required />
+      <input id="name" name="name" maxLength={50} required />
       <label htmlFor="password">Password:</label>
-      <input id="password" name="password" type="password" maxLength="50" required />
+      <input id="password" name="password" type="password" maxLength={50} required />
       <button type="submit">Register</button>
     </form>
   );

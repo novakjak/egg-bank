@@ -4,6 +4,7 @@ import { Db, User, Payment, Account as DbAccount} from '../database.server';
 import type { Route } from './+types/account';
 import Error from '../components/Error';
 import { ArrowsRightLeftIcon } from '@heroicons/react/24/solid'
+import { timeFormat } from '../util';
 
 export async function loader({ request, params }: Route.LoaderArgs) {
   const session = await getSession(
@@ -29,7 +30,7 @@ export async function action({ request, params }: Route.ActionArgs) {
   const uid = session.get('uid');
   const formData = await request.formData();
 
-  const amount = formData.get('amount') as number;
+  const amount = formData.get('amount') as unknown as number;
   const destination = formData.get('account') as string;
   if (!/\w+#\d+/.test(destination)) {
     return { error: true, message: "Destination account does not match required format." };
@@ -40,15 +41,21 @@ export async function action({ request, params }: Route.ActionArgs) {
     return { error: true, message: "Destination account does not exist." };
   }
   const sender_account = await DbAccount.readByUserAndNumber(uid!, +params.aid);
+  if (!sender_account) {
+    return { error: true, message: "Sender account does not exists." };
+  }
   if (target_account.id === sender_account.id) {
     return { error: true, message: "Cannot transfer to the same account." };
   }
 
   try {
     await Db.transfer(sender_account, target_account, amount);
-  } catch (e) {
+  } catch (e: any) {
     console.log(e)
-    return { error: true, message: e.message }
+    if (e.message) {
+      return { error: true, message: e.message };
+    }
+    return { error: true, message: "unknown error" };
   }
 }
 
@@ -57,15 +64,6 @@ export default function Account({ loaderData, actionData }: Route.ComponentProps
   const user = loaderData.user!;
   const account = loaderData.account!;
   const payments = loaderData.payments!.toSorted((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
-  const timeFormat = new Intl.DateTimeFormat("cs", {
-    hourCycle: 'h24',
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-  });
 
   return (
     <>
@@ -75,10 +73,10 @@ export default function Account({ loaderData, actionData }: Route.ComponentProps
         <p>{user.name}#{account.number}</p>
         <p>Balance: {account.balance}</p>
       </div>
-      <button commandfor="popover" command="show-popover">New payment</button>
+      <button popoverTarget="popover" popoverTargetAction="show">New payment</button>
       <div id="popover" popover="auto">
         <div id="popovercontent">
-          <button className="closebutton" commandfor="popover" command="hide-popover">Close</button>
+          <button className="closebutton" popoverTarget="popover" popoverTargetAction="hide">Close</button>
           <form method="post">
             <label htmlFor="account">Send funds to:</label>
             <input id="account" name="account" type="text" placeholder="user#123" pattern="\w+#\d+" required />

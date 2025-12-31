@@ -31,18 +31,22 @@ export class Db {
     return Db.inst;
   }
 
-  public static async auth(name: string, password: string): Promise<number | null> {
+  public static async auth(name: string, password: string): Promise<[number, boolean] | null> {
     const request = new pkg.Request((await Db.instance()).pool)
     const res = await request
-      .input('name', pkg.NVarChar, name)
-      .input('password', pkg.NVarChar, password)
+      .input('name', pkg.VarChar, name)
+      .input('password', pkg.VarChar, password)
       .output('authed', pkg.Int)
+      .output('admin', pkg.Bit)
       .execute('auth_user')
 
-    return res.output['authed']
+    if (!res.output['authed']) {
+      return null;
+    }
+    return [res.output['authed'], res.output['admin']];
   }
 
-  public static async transfer(from: Account, to: Account, amount: number): Promise {
+  public static async transfer(from: Account, to: Account, amount: number) {
     const request = new pkg.Request((await Db.instance()).pool);
     await request
       .input('from', pkg.Int, from.id)
@@ -56,13 +60,11 @@ export class User {
   id: number | null;
   name: string;
   password: string;
-  accounts: Account[];
 
   constructor(name: string, password: string, id?: number) {
     this.id = id ?? null;
     this.name = name;
     this.password = password;
-    this.accounts = [];
   }
 
   public static async readById(id: number): Promise<User | null> {
@@ -78,6 +80,21 @@ export class User {
     return user;
   }
 
+  public static async readAll(): Promise<User[]> {
+    const request = new pkg.Request((await Db.instance()).pool)
+    const response = await request
+      .query('select id, name, password from users');
+    let users = []
+    for (const row of response.recordset) {
+      users.push(new User(
+        row['name'],
+        row['password'],
+        row['id'],
+      ));
+    }
+    return users;
+  }
+
   public async save() {
     if (!this.id) {
       await this.insert();
@@ -88,8 +105,8 @@ export class User {
   private async insert() {
     const request = new pkg.Request((await Db.instance()).pool)
     const res = await request
-      .input('name', pkg.NVarChar, this.name)
-      .input('password', pkg.NVarChar, this.password)
+      .input('name', pkg.VarChar, this.name)
+      .input('password', pkg.VarChar, this.password)
       .query('insert into users (name, password) values (@name, @password); select SCOPE_IDENTITY() as id;')
     this.id = res.recordset[0].id
   }
@@ -97,8 +114,8 @@ export class User {
     const request = new pkg.Request((await Db.instance()).pool)
     await request
       .input('id', pkg.Int, this.id)
-      .input('name', pkg.NVarChar, this.name)
-      .input('password', pkg.NVarChar, this.password)
+      .input('name', pkg.VarChar, this.name)
+      .input('password', pkg.VarChar, this.password)
       .query('update users set name=@name, password=@password where id=@id')
   }
   public async delete() {
@@ -112,8 +129,8 @@ export class User {
   }
 }
 
-export  class Account {
-  id: number | null;
+export class Account {
+  id: number;
   user: User;
   number: number;
   name: string;
@@ -142,7 +159,7 @@ export  class Account {
     for (const row of response.recordset) {
       res.push(new Account(
         row['id'],
-        await User.readById(row['user_id']),
+        (await User.readById(row['user_id']))!,
         row['num'],
         row['name'],
         row['type'],
@@ -167,7 +184,7 @@ export  class Account {
     const row = response.recordset[0];
     return new Account(
       row['id'],
-      await User.readById(row['user_id']),
+      (await User.readById(row['user_id']))!,
       row['num'],
       row['name'],
       row['type'],
@@ -179,7 +196,7 @@ export  class Account {
   public static async readByUserNameAndNumber(username: string, acc_num: number): Promise<Account | null> {
     const request = new pkg.Request((await Db.instance()).pool);
     const response = await request
-      .input('user_name', pkg.NVarChar, username)
+      .input('user_name', pkg.VarChar, username)
       .input('acc_num', pkg.Int, acc_num)
       .query(`select a.id, a.user_id, a.number, a.name, a.type, a.balance, a.status
                 from account as a
@@ -191,7 +208,7 @@ export  class Account {
     const row = response.recordset[0];
     return new Account(
       row['id'],
-      await User.readById(row['user_id']),
+      (await User.readById(row['user_id']))!,
       row['num'],
       row['name'],
       row['type'],
@@ -200,17 +217,20 @@ export  class Account {
     );
   }
 
-  public static async readById(id: number): Promise<Account> {
+  public static async readById(id: number): Promise<Account | null> {
     const request = new pkg.Request((await Db.instance()).pool);
     const response = await request
       .input('id', pkg.Int, id)
       .query(`select id, user_id, number as num, name, type, balance, status
                 from account as a
                 where a.id = @id`);
+    if (response.recordset.length === 0) {
+      return null;
+    }
     const row = response.recordset[0];
     return new Account(
       row['id'],
-      await User.readById(row['user_id']),
+      (await User.readById(row['user_id']))!,
       row['num'],
       row['name'],
       row['type'],
@@ -223,8 +243,8 @@ export  class Account {
     const request = new pkg.Request((await Db.instance()).pool);
     const res = await request
       .input('user', pkg.Int, user)
-      .input('name', pkg.NVarChar, name)
-      .input('type', pkg.NVarChar, type)
+      .input('name', pkg.VarChar, name)
+      .input('type', pkg.VarChar, type)
       .output('account_id', pkg.Int)
       .execute('open_account');
     return await Account.readById(res.output['account_id']);
@@ -268,6 +288,53 @@ export class Payment {
         await Account.readById(row['from_acc']),
         await Account.readById(row['to_acc']),
         row['amount'],
+      ));
+    }
+    return res;
+  }
+}
+
+export class Log {
+  id: number;
+  timestamp: Date;
+  type: string;
+  message: string;
+  user: User | number | null;
+  account: Account | number | null;
+
+  private constructor(id: number, timestamp: Date, type: string, message: string, user: User | number | null, account: Account | number | null) {
+    this.id = id;
+    this.timestamp = timestamp;
+    this.type = type;
+    this.message = message;
+    this.user = user;
+    this.account = account;
+  }
+
+  public static async readAll(): Promise<Log[]> {
+    const request = new pkg.Request((await Db.instance()).pool);
+    const response = await request
+      .query(`select l.id, l.timestamp, t.type, l.message, l.user_id, l.account
+                from log l
+                inner join log_msg_type t on l.type = t.id`);
+    let res = [];
+    for (const row of response.recordset) {
+      let user = null;
+      if (!!row['user_id']) {
+        user = await User.readById(row['user_id']) ?? row['user_id']
+      }
+      let account = null;
+      if (!!row['account']) {
+        account = await Account.readById(row['account']) ?? row['account']
+      }
+
+      res.push(new Log(
+        row['id'],
+        row['timestamp'],
+        row['type'],
+        row['message'],
+        user,
+        account,
       ));
     }
     return res;

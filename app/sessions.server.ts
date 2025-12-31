@@ -4,6 +4,7 @@ import { User } from "./database.server";
 
 type SessionData = {
   uid: number;
+  admin: boolean;
 };
 
 type SessionFlashData = {

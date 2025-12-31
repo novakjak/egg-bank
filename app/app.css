@@ -56,6 +56,17 @@ h1 {
   @apply bg-red-200;
 }
 
+.log {
+  @apply bg-neutral-200 border-[0.2rem] border-solid rounded-md;
+  @apply grid grid-cols-[1fr_1fr_1fr_1fr] gap-[1rem];
+  @apply my-[0.5rem];
+}
+
+.logHeader {
+  @apply grid grid-cols-[1fr_1fr_1fr_1fr] gap-[1rem];
+  @apply my-[0.5rem];
+}
+
 .egg::after {
   content: " 🥚";
 }

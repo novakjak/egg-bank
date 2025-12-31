@@ -39,9 +39,12 @@ export async function action({
       }
     });
   }
+  const [user_id, admin] = authed
 
-  session.set('uid', authed);
-  return redirect('/dashboard', {
+  session.set('uid', user_id);
+  session.set('admin', admin);
+  const dashboard = admin ? '/admin' : '/dashboard';
+  return redirect(dashboard, {
     headers: {
       'Set-Cookie': await commitSession(session),
     }
@@ -53,9 +56,9 @@ export default function Login({ actionData }: Route.ComponentProps) {
     <form method="post" className="flex flex-col">
       <Error error={actionData?.error} message={actionData?.message} />
       <label htmlFor="name">Name:</label>
-      <input id="name" name="name" maxLength="50" required />
+      <input id="name" name="name" maxLength={50} required />
       <label htmlFor="password">Password:</label>
-      <input id="password" name="password" type="password" maxLength="50" required />
+      <input id="password" name="password" type="password" maxLength={50} required />
       <button type="submit">Login</button>
     </form>
   );

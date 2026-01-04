@@ -32,10 +32,11 @@ Střední průmyslová škola elektrotechnická, Praha 2, Ječná 30
 
 Egg Bank bude webová aplikace pro správu bankovního systému. Program bude umožňovat vytvoření uživatelských profilů,
 ke kterým bude možno otevřít účty. Jednotlivé účty budou držet nějaký obnos měny (v tomto případě vajec) a bude možno
-mezi jednotlivými účty měny přeposílat.
+mezi jednotlivými účty měny přeposílat. Uživatelé si budou moci vytvořit spořící účty, kterým vždy po určitém intervalu
+budou připsány úroky.
 
-Dále systém bude obsahovat nástroje pro administraci. Mezi ně bude patřit export z databáze, import do databáze a
-prohlížení logů.
+Dále systém bude obsahovat nástroje pro administraci. Mezi ně bude patřit export z databáze, import do databáze,
+výpis přehledu statisktik celkového systému a prohlížení logů.
 
 = Popis architektury
 

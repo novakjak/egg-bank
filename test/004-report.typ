@@ -52,7 +52,7 @@
 + Create a new transaction.
 + Log out of your user.
 + Log back in as admin.
-+ Notice that `Total payment count` has increased by one.
++ Notice that `Total payment count` has increased.
 + Notice that `Total balance transferred` has increased.
   - Note that depending on how long the testing will take `Total balance transsfered`
     can increase by a higher value that the one you have specified during the transaction.

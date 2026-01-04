@@ -31,6 +31,9 @@ export async function action({ request, params }: Route.ActionArgs) {
   const formData = await request.formData();
 
   const amount = formData.get('amount') as unknown as number;
+  if (amount <= 0) {
+    return { error: true, message: "Amount must be a positive number" };
+  }
   const destination = formData.get('account') as string;
   if (!/\w+#\d+/.test(destination)) {
     return { error: true, message: "Destination account does not match required format." };
@@ -81,7 +84,7 @@ export default function Account({ loaderData, actionData }: Route.ComponentProps
             <label htmlFor="account">Send funds to:</label>
             <input id="account" name="account" type="text" placeholder="user#123" pattern="\w+#\d+" required />
             <label htmlFor="amount">Amount of funds to transfer:</label>
-            <input id="amount" name="amount" type="number" min="0" max={account.balance} required />
+            <input id="amount" name="amount" type="number" min="0" max={account.balance} step="0.001" required />
             <button type="submit">Transfer</button>
           </form>
         </div>

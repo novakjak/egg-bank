@@ -39,7 +39,7 @@ create table log (
     id int identity(1,1) primary key,
     timestamp datetime not null default(getdate()),
     type int foreign key references log_msg_type(id) not null,
-    message varchar(50) not null,
+    message varchar(80) not null,
     user_id int null default(null),
     account int null default(null),
 );
@@ -50,13 +50,15 @@ create view interest as select id, balance * 0.005 as interest from account wher
 
 go
 
-insert into users (name, password, admin) values ('admin', 'Hunter12', 'true'), ('Egg Bank', '*******', 'true'), ('karel', 'karel', 'false');
+insert into users (name, password, admin) values ('admin', 'Hunter12', 'true'), ('Egg Bank', '*******', 'true');
 insert into account (user_id, number, name, type, status, balance) values (2, 1, 'Egg Bank', 'basic', 'active', 0);
 insert into log_msg_type (type) values ('user created'), ('user deleted'), ('account opened'), ('account closed'), ('transferred funds'), ('added funds');
 
 go
 
 create trigger log_added_users on users for insert as begin
+    set xact_abort on;
+    set nocount on;
     declare @created int = (select id from log_msg_type where type = 'user created');
     insert into log (type, message, user_id) select @created, 'added user ' + name, id from inserted;
 end
@@ -64,6 +66,8 @@ end
 go
 
 create trigger log_opened_acount on account for insert as begin
+    set xact_abort on;
+    set nocount on;
     declare @created int = (select id from log_msg_type where type = 'account opened');
     insert into log (type, message, user_id, account)
         select @created, 'opened ' + type + ' account', user_id, id
@@ -75,6 +79,8 @@ go
 create or alter procedure auth_user
     @name varchar(50), @password varchar(50), @authed int out, @admin bit out
 as begin
+    set xact_abort on;
+    set nocount on;
     select @authed = id, @admin = admin from users where name = @name and password = @password;
 end;
 
@@ -83,6 +89,8 @@ go
 create or alter procedure transfer
     @from int, @to int, @amount decimal(38,3), @message varchar(50) = null
 as begin
+    set xact_abort on;
+    set nocount on;
     begin transaction;
     declare @usable_funds decimal(38,3) = (select balance from account where id = @from);
     if @usable_funds < @amount begin
@@ -109,6 +117,8 @@ go
 create or alter procedure add_funds
     @to int, @amount decimal(38, 3)
 as begin
+    set xact_abort on;
+    set nocount on;
     begin transaction;
     update account set balance = balance + @amount where id = @to;
 
@@ -125,6 +135,8 @@ go
 create or alter procedure open_account
     @user int, @name varchar(50), @type varchar(20), @account_id int out
 as begin
+    set xact_abort on;
+    set nocount on;
     begin transaction;
 
     declare @number int = (select count(*) + 1 from account where user_id = @user);
@@ -143,6 +155,8 @@ go
 
 create or alter procedure add_interest
 as begin
+    set xact_abort on;
+    set nocount on;
     begin transaction;
     declare @total_interest decimal(38,3) = (select sum(interest) from interest);
     if @total_interest = 0.0 begin
@@ -216,9 +230,10 @@ go
 
 go
 
-execute open_account 3, 'Karluv super ucet', 'basic', 0;
-execute open_account 3, 'Karluv sporici ucet', 'savings', 0;
-execute add_funds 1, 1000;
-execute add_funds 2, 555;
+-- insert into users (name, password) values ('karel', 'karel');
+-- execute open_account 3, 'Karluv super ucet', 'basic', 0;
+-- execute open_account 3, 'Karluv sporici ucet', 'savings', 0;
+-- execute add_funds 1, 1000;
+-- execute add_funds 2, 500;
 
 go

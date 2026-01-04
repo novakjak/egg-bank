@@ -11,5 +11,7 @@ export default [
     route("dashboard", "routes/dashboard.tsx"),
     route("dashboard/account/:aid", "routes/account.tsx"),
     route("admin", "routes/adminDashboard.tsx"),
+    route("import", "routes/import.tsx"),
   ]),
+  route("export", "routes/export.ts"),
 ] satisfies RouteConfig;

@@ -15,6 +15,9 @@ export async function loader({ request }: Route.LoaderArgs) {
   }
   const uid = session.get('uid');
   const user = await User.readById(uid!);
+  if (!user) {
+    return redirect('/');
+  }
   const accounts = await Account.readByUser(uid!);
   let totalInterest = 0
   for (const a of accounts) {
@@ -61,7 +64,7 @@ export async function action({
     await Account.create(uid!, name, type)
   } catch (e: any) {
     console.log(e)
-    return { error: true, message: e.toString() }
+    return { error: true, message: "Creating account failed" }
   }
 }
 
@@ -79,7 +82,7 @@ export default function Dashboard({ loaderData, actionData }: Route.ComponentPro
           <Link to={"/dashboard/account/" + a.number} className="account" key={a.id}>
             <p>{a.name}</p>
             <p className="neutral-800">{a.type}</p>
-            <p className="text-center egg">{a.balance}</p>
+            <p className="text-center egg">{formatNumber(a.balance)}</p>
           </Link>
         ))}
         <button popoverTarget="popover" popoverTargetAction="show" className="account justify-center">
@@ -109,9 +112,11 @@ export default function Dashboard({ loaderData, actionData }: Route.ComponentPro
         </div>
       </div>
       <div id="overview">
-        <p className="egg">Your total funds are {totalFunds.toFixed(3)}</p>
-        {totalInterest > 0 ? <p>You've made a total of <span className="egg">{totalInterest.toFixed(3)}</span> on interest!</p> : null}
+        <p className="egg">Your total funds are {formatNumber(totalFunds)}</p>
+        {totalInterest > 0 ? <p>You've made a total of <span className="egg">{formatNumber(totalInterest)}</span> on interest!</p> : null}
       </div>
     </>
   );
 }
+
+const formatNumber = num => num.toFixed(3).replace(/\.?0+$/, '')

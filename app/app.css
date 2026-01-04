@@ -7,11 +7,11 @@
 
 html,
 body {
-  @apply bg-yellow-50;
+  @apply bg-yellow-50 text-[16pt];
 }
 
 button {
-  @apply bg-zinc-400;
+  @apply bg-zinc-300;
   @apply rounded-md;
   @apply p-1;
 }
@@ -28,8 +28,24 @@ form > input {
   @apply bg-yellow-400 outline-yellow-300 focus:outline-3 mb-3;
 }
 
+form > input[type="file"] {
+  @apply bg-neutral-300;
+}
+
 h1 {
   @apply text-3xl mb-[1rem];
+}
+
+header {
+  @apply border-b-[0.1rem] mb-[1rem] border-neutral-700; 
+}
+
+hr {
+  @apply border-t-[0.2rem] text-center overflow-visible;
+}
+
+hr[data-text]::after {
+  @apply bg-yellow-50 px-[0.5rem] relative top-[-0.7em] content-[attr(data-text)];
 }
 
 .account {
@@ -40,9 +56,16 @@ h1 {
   @apply place-self-end absolute;
 }
 
+.iconbutton {
+  @apply bg-zinc-300;
+  @apply rounded-md;
+  @apply p-1;
+  @apply flex flex-row items-center;
+}
+
 .payment {
   @apply border-[0.2rem] border-solid rounded-md;
-  @apply grid grid-cols-[auto_auto_1fr_2fr_2fr_2fr] gap-[1rem];
+  @apply grid grid-cols-[auto_auto_1fr_2fr_2fr_2fr] gap-[1rem] items-center;
   @apply my-[0.5rem];
 }
 
@@ -68,12 +91,12 @@ h1 {
 }
 
 .egg::after {
-  content: " 🥚";
+  @apply break-keep;
+  content: "🥚";
 }
 
 #popover {
-  @apply bg-black w-screen h-screen absolute top-0 left-0 pt-[10vh];
-  background-color: #20202080;
+  @apply bg-[#20202080] w-screen h-screen absolute top-0 left-0 pt-[10vh];
 }
 
 #popovercontent  {

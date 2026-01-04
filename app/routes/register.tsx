@@ -29,6 +29,7 @@ export async function action({
     await user.save();
     session.set('uid', user.id!);
   } catch (e) {
+    console.log(e)
     return { error: true, message: 'A user with such name already exists.' }
   }
 

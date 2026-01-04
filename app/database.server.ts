@@ -574,3 +574,51 @@ export class Log {
     return res;
   }
 }
+
+export class UserWithTotalBalance {
+  id: number;
+  name: string;
+  total_balance: number;
+
+  private constructor(id: number, name: string, total_balance: number) {
+    this.id = id;
+    this.name = name;
+    this.total_balance = total_balance;
+  }
+
+  public static async readAll(): Promise<UserWithTotalBalance[]> {
+    const request = new pkg.Request((await Db.instance()).pool);
+    const response = await request.query('select * from users_with_total_balance');
+    let res = [];
+    for (const row of response.recordset) {
+      res.push(new UserWithTotalBalance(
+        row['id'],
+        row['name'],
+        row['total_balance'],
+      ));
+    }
+    return res;
+  }
+}
+export class UserWithoutAccounts {
+  id: number;
+  name: string;
+
+  private constructor(id: number, name: string) {
+    this.id = id;
+    this.name = name;
+  }
+
+  public static async readAll(): Promise<UserWithoutAccounts[]> {
+    const request = new pkg.Request((await Db.instance()).pool);
+    const response = await request.query('select * from users_without_accounts');
+    let res = [];
+    for (const row of response.recordset) {
+      res.push(new UserWithoutAccounts(
+        row['id'],
+        row['name'],
+      ));
+    }
+    return res;
+  }
+}

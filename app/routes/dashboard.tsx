@@ -3,6 +3,7 @@ import { getSession } from '../sessions.server';
 import { Account, User, Payment } from '../database.server';
 import { PlusIcon } from '@heroicons/react/24/solid'
 
+import { formatNumber } from '../util';
 import Error from '../components/Error';
 import type { Route } from './+types/dashboard';
 
@@ -118,5 +119,3 @@ export default function Dashboard({ loaderData, actionData }: Route.ComponentPro
     </>
   );
 }
-
-const formatNumber = num => num.toFixed(3).replace(/\.?0+$/, '')

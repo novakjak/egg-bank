@@ -47,10 +47,23 @@ create table log (
 go
 
 create view interest as select id, balance * 0.005 as interest from account where type = 'savings' and status = 'active';
+go
+create view users_with_total_balance
+    as select u.id, u.name, sum(a.balance) as total_balance
+        from users u
+        inner join account a on a.user_id = u.id
+        group by u.id, u.name;
+go
+create view users_without_accounts
+    as select u.id, u.name
+        from users u
+        left join account a on a.user_id = u.id
+        group by u.id, u.name
+        having count(a.id) = 0;
 
 go
 
-insert into users (name, password, admin) values ('admin', 'Hunter12', 'true'), ('Egg Bank', '*******', 'true');
+insert into users (name, password, admin) values ('admin', 'Hunter12', 'true'), ('EggBank', '*******', 'true');
 insert into account (user_id, number, name, type, status, balance) values (2, 1, 'Egg Bank', 'basic', 'active', 0);
 insert into log_msg_type (type) values ('user created'), ('user deleted'), ('account opened'), ('account closed'), ('transferred funds'), ('added funds');
 
@@ -104,11 +117,12 @@ as begin
 
     declare @user_id int = (select user_id from account where id = @from);
     declare @log_msg_type int = (select id from log_msg_type where type = 'transferred funds');
+    declare @log_msg varchar(80) = 'transferred ' + cast(@amount as varchar) + ' from ' + cast(@from as varchar) + ' to ' + cast(@to as varchar);
+    if @message is not null begin
+        set @log_msg = 'transferred ' + cast(@amount as varchar) + ': ' + @message;
+    end
     insert into log (type, message, user_id, account)
-        values (@log_msg_type,
-            'transferred ' + cast(@amount as varchar) + ' from ' + cast(@from as varchar) + ' to ' + cast(@to as varchar),
-            @user_id,
-            @from);
+        values (@log_msg_type, @log_msg, @user_id, @from);
     commit transaction;
 end;
 
@@ -182,7 +196,7 @@ as begin
     end
 
     drop table #interest_temp;
-    commit;
+    commit transaction;
 end
 
 go
@@ -233,7 +247,7 @@ go
 -- insert into users (name, password) values ('karel', 'karel');
 -- execute open_account 3, 'Karluv super ucet', 'basic', 0;
 -- execute open_account 3, 'Karluv sporici ucet', 'savings', 0;
--- execute add_funds 1, 1000;
--- execute add_funds 2, 500;
+-- execute add_funds 2, 1000;
+-- execute add_funds 3, 500;
 
 go

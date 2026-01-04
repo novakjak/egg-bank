@@ -7,3 +7,5 @@ export const timeFormat = new Intl.DateTimeFormat("cs", {
   minute: '2-digit',
   second: '2-digit',
 });
+
+export const formatNumber = num => num.toFixed(3).replace(/\.?0+$/, '')

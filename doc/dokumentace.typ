@@ -88,6 +88,7 @@ Aplikace závisí na těchto knihovnách, programech a technologiích:
 - Typescript - #link("https://www.typescriptlang.org/")
 - Node.js - #link("https://nodejs.org/en")
 - Microsoft SQL Server - #link("https://www.microsoft.com/en-us/sql-server/sql-server-downloads")
+- Typst - #link("https://typst.app/")
 
 = Licence
 

@@ -7,6 +7,9 @@
 #show "test_prerequisite": [];
 #show "test_prerequisite": upper;
 #show "test_creator": [Jakub Novák];
+#show "tests_requirements": [];
+
+= Test case test_number
 
 #table(
   columns: (1fr, 1fr, 1fr, 1fr),
@@ -20,7 +23,11 @@
   [Prerequisite tests],
   [test_prerequisite],
   [Test creator],
-  [test_creator]
+  [test_creator],
+  [Tests requirements from assignment],
+  [tests_requirements],
+  [Test creation date],
+  datetime.today().display(),
 )
 
 = Steps

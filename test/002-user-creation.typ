@@ -36,10 +36,10 @@
 + Try to create a user with *incorrect* name.
   - *Incorrect *means that the name contains anything other than letters (without accents), numbers and underscores (\_)
     and is 50 characters or longer.
-  - *Incorrect* also means a user whose name is already taken, those being `admin`, `Egg Bank` and `karel`.
+  - *Incorrect* also means a user whose name is already taken, those being `admin`, `EggBank`, `karel` and `jana`.
 + Confirm that upon trying to register a user with an *incorrect* name an error message is shown.
 + Enter a *correct* name and password of your choosing.
-  - Note that users with name `admin`, `Egg Bank` and `karel` already exist
+  - Note that users with name `admin`, `EggBank`, `karel` and `jana` already exist
     and therefore cannot be chosen.
 + Note down your login credentials for further use.
 + Confirm that you have been redirected to the dashboard.

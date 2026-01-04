@@ -38,14 +38,19 @@
 + Paste script within `database.sql` into the newly created query.
 + Confirm that the table definitions in the query contain colums with types `decimal`, `bit`, `varchar`, `datetime`
   and that some columns have a check constraint in the form of `check(<column> in ('<str1>', '<str2>', ...))`.
++ Confirm that the `payment` table contains at least two foreign keys referencing one table.
+  - These are written as `foreign key references <table>(id)`.
++ Confirm that there exist at least two view definitions in the form of `create view <view_name> ...`.
++ Confirm that transactions are used.
+  - Transactions are denoted with `begin transaction`, `commit transactions` and `rollback`.
 + Execute query.
 + Reload `Databases` in _Object Explorer_.
 + Confirm that a database named `egg_bank` was created.
 + Confirm that the databae contains tables `users`, `account`, `payment`, `log` and `log_msg_type`.
-+ Install dependencies with `npm install`.
++ Install dependencies by executing `npm install` in a console in the project directory.
 + Update configuration options in the `.env` file in project root directory.
   - See _README.md_ for configuration options.
-+ Run the server with `npm run dev`.
++ Run the server by executing `npm run dev` in a console in the project directory.
 + Change configuration to something incorrect and try to restart server.
   - Server can be stopped by pressing CTRL-C.
 + Confirm that server does not start and prints an error message.

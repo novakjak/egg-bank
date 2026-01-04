@@ -4,7 +4,7 @@
 #show "test_number": upper;
 #show "test_name": [Account creation];
 #show "test_description": [A user will open an account to store their eggs];
-#show "test_prerequisite": [t002];
+#show "test_prerequisite": [t002, t001];
 #show "test_prerequisite": upper;
 #show "test_creator": [Jakub Novák];
 #show "tests_requirements": [9];

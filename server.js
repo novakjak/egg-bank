@@ -25,6 +25,15 @@ try {
   process.exit(1);
 }
 
+const timeout = setInterval(async () => {
+  try {
+    await db.Db.add_interest();
+  } catch (e) {
+    console.log(`An error occured when adding interest: ${e}`);
+    clearInterval(timeout);
+  }
+}, 5 * 60 * 1000);
+
 if (DEVELOPMENT) {
   console.log("Starting development server");
   app.use(viteServer.middlewares);

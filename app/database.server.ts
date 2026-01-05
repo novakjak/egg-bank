@@ -54,6 +54,11 @@ export class Db {
       .execute('transfer');
   }
 
+  public static async add_interest() {
+    const request = new pkg.Request((await Db.instance()).pool);
+    await request.execute('add_interest');
+  }
+
   public static async createTransaction(): Promise<pkg.Transaction> {
     const transaction = new pkg.Transaction((await Db.instance()).pool);
     await transaction.begin();

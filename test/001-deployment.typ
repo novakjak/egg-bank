@@ -31,7 +31,7 @@
 )
 
 = Steps
-+ Connect to Microsoft SQL Server using SQL Server Management Studio.
++ Connect to Microsoft SQL Server using SQL Server Management Studio as the system administrator (sa).
 + Start the SQL Server Agent service if it is not running.
   - See https://database.guide/enable-sql-server-agent-via-ssms/ for a guide.
 + Create a new query.
@@ -50,10 +50,14 @@
 + Install dependencies by executing `npm install` in a console in the project directory.
 + Update configuration options in the `.env` file in project root directory.
   - See _README.md_ for configuration options.
+  - The only option that will probably need to be changed is `DATABASE_SERVER`.
 + Run the server by executing `npm run dev` in a console in the project directory.
++ Confirm that the server started successfully by opening the address `http://localhost:5173`
+  in a web browser.
 + Change configuration to something incorrect and try to restart server.
   - Server can be stopped by pressing CTRL-C.
-+ Confirm that server does not start and prints an error message.
++ Confirm that server does not start and prints an error message to the command line.
++ Change configuration back to the correct settings.
 + Open Web UI in a browser at the address `http://localhost:5173`.
 + Open _Login_ page.
 + Log in with name `admin` and password `Hunter12`.
@@ -62,8 +66,6 @@
 + For the second file input select `account.json` from the `export/` directory.
 + For the third file input select `payment.json` from the `export/` directory.
 + Click on _Import_.
-
-= Confirmation of expected results
 + Click on button labeled _Back to dashboard_.
 + Confirm that log section contains messages of user creation and opening of accounts.
 + Click on button labeled _Logout_.

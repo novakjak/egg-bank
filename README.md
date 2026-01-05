@@ -17,13 +17,15 @@
 ## Configuration
 
 All configuration is stored in the file `.env` in the project directory. Configuration is written
-in the format of `KEY=value` with each key-value pair being on its own line.
+in the format of `KEY=value` with each key-value pair being on its own line. `DATABASE_USER`,
+`DATABASE_PASSWORD` and `DATABASE` should almost definetly be left as their default values
+unless you have altered the database creation script (`database.sql`).
 
 | Config key | Data type | Explanation | Example |
 | ---------- | --------- | ----------- | ------- |
-| DATABASE_USER | string | The database user under which the web server will connect to. | sa |
-| DATABASE_PASSWORD | string | Password of the database user. | S3cret |
+| DATABASE_USER | string | The database user under which the web server will connect to. | db_user |
+| DATABASE_PASSWORD | string | Password of the database user. | S3cret.P4ssword |
+| DATABASE | string | Name of the database. You probably want to leave this as is | egg_bank |
 | DATABASE_SERVER | string | Location of the server, can be an IP address or a hostname. | localhost |
 | DATABASE_PORT | integer | The port of the database | 1433 |
-| DATABASE | string | Name of the database. You probably want to leave this as is | egg_bank |
 | TRUSTSERVERCERTIFICATE | bool | Whether to trust the database server's certificate, even though it might be self signed | true |

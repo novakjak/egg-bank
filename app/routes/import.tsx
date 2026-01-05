@@ -67,8 +67,12 @@ export async function action({ request }: Route.ActionArgs) {
   }
 
   let transaction;
+  let rolled_back = false;
   try {
     transaction = await Db.createTransaction();
+    transaction.on('rollback', () => {
+      rolled_back = true
+    });
   } catch (e) {
     return { error: true, message: "could not create transaction" };
   }
@@ -78,7 +82,9 @@ export async function action({ request }: Route.ActionArgs) {
     await AccountRaw.truncate(transaction);
     await User.truncate(transaction);
   } catch (e) {
-    await transaction.rollback();
+    if (!rolled_back) {
+      await transaction.rollback();
+    }
     console.log(e);
     return { error: true, message: "Could not truncate tables" };
   }
@@ -87,7 +93,6 @@ export async function action({ request }: Route.ActionArgs) {
       if (!user) {
         continue;
       }
-      console.log(user);
       await user.insertRaw(transaction);
     }
     for (const account of accounts) {
@@ -103,7 +108,9 @@ export async function action({ request }: Route.ActionArgs) {
       await payment.insertRaw(transaction);
     }
   } catch (e) {
-    await transaction.rollback();
+    if (!rolled_back) {
+      await transaction.rollback();
+    }
     console.log(e);
     return { error: true, message: "Could not import data into tables" };
   }
@@ -111,7 +118,9 @@ export async function action({ request }: Route.ActionArgs) {
   try {
     await transaction.commit();
   } catch (e) {
-    await transaction.rollback();
+    if (!rolled_back) {
+      await transaction.rollback();
+    }
     return { error: true, message: "There was an error commiting the data to the database" };
   }
   return { success: true, message: "Data imported successfully" };

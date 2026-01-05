@@ -31,29 +31,37 @@
 )
 
 = Steps
++ Open main page at `http://localhost:5173` in a web browser.
 + Log in as the user created in test _T002_.
 + Click on _Open account_.
 + Enter account name.
 + Select type _Basic_.
 + Click on _Register_.
++ Confirm that a widget was added to the dashboard.
++ Confirm that the widget contains the name you have entered.
++ Confirm that the widget contains the word _basic_.
 + Click on _Open account_.
 + Leave account name blank.
 + Select type _Basic_.
 + Click on _Register_.
++ Confirm that a new widget was added to the dashboard.
++ Confirm that the widget contains the name _Basic account_.
++ Confirm that the widget contains the word _basic_ on the second line.
 + On the dashboard click on the account created first.
++ Confirm that the an incoming payment is shown with a green background.
++ Confirm that the payment has an amount of 50 eggs.
++ Confirm that the payment contains the message: "A gift for first time Egg Bank users".
++ Confirm that the payment was sent from the account _EggBank\#1_.
 + Click on _New payment_.
 + Enter destination account in the form of `<name>#2` where `<name>` is the name of the user you have created.
   - For example if the user is named `Daniel` then you would enter `Daniel#2`.
 + Enter amount of funds greater that zero and less that the balance held in the account.
 + Click on _Transfer_.
-
-= Confirmation of expected results
-+ On the dashboard click on the account created first.
-+ It should have the name you have specified.
-+ It should show two payments.
-  - The first is incoming from account `Egg Bank#1` with 50 eggs shown in green.
-  - The second outgoing to the account created second with amount that you have chosen.
-+ On the dashboard click on the account created second.
-+ It should be named _Basic account_.
-+ It should have only one incoming payment from the first account with the same amount.
-+ On the dashboard it should show that your total funds are 50.
++ Confirm that _Balance_ decreased.
++ Confirm that a new outgoing payment of the amount you specified is
+  displayed with red background with no message.
++ Click on _Back to dashboard_.
++ Click on the account created second.
++ It should show one incoming payment from the first account with the same amount.
++ Click on _Back to dashboard_.
++ It should show that your total funds is 50 eggs.

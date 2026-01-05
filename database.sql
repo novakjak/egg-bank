@@ -201,53 +201,94 @@ end
 
 go
 
--- Create job to add funds to every savings account,
-use msdb;
-go
-execute sp_configure 'show advanced options', 1;
-go
-reconfigure;
-go
-execute sp_configure 'Agent XPs', 1;
-go
-reconfigure;
-go
-execute sp_delete_job @job_name = 'Add funds to savings accounts', @delete_unused_schedule = 1;
-go
-execute sp_add_job @job_name = 'Add funds to savings accounts';
-go
-execute sp_add_jobstep
-    @job_name = 'Add funds to savings accounts',
-    @step_name = 'Increase account balance',
-    @command = 'execute add_interest',
-    @database_name = 'egg_bank',
-    @retry_attempts = 3;
-go
-execute sp_add_schedule
-    @schedule_name = 'Every5Minutes',
-    @freq_type = 4, -- dayly
-    @freq_interval = 1, -- 1 day
-    @freq_subday_type = 4, -- minutes
-    @freq_subday_interval = 5; -- 5 minutes
+-- NOTE: Since SQLAgent isn't available on school PCs this code is not able
+--       to be used. Instead calling of the add_interest procedure will be done
+--       from the server.
+-- Create a job to add funds to every savings account,
+-- use msdb;
+-- go
+-- execute sp_configure 'show advanced options', 1;
+-- go
+-- reconfigure;
+-- go
+-- execute sp_configure 'Agent XPs', 1;
+-- go
+-- reconfigure;
+-- go
+-- execute sp_delete_job @job_name = 'Add funds to savings accounts', @delete_unused_schedule = 1;
+-- go
+-- execute sp_add_job @job_name = 'Add funds to savings accounts';
+-- go
+-- execute sp_add_jobstep
+--     @job_name = 'Add funds to savings accounts',
+--     @step_name = 'Increase account balance',
+--     @command = 'execute add_interest',
+--     @database_name = 'egg_bank',
+--     @retry_attempts = 3;
+-- go
+-- execute sp_add_schedule
+--     @schedule_name = 'Every5Minutes',
+--     @freq_type = 4, -- dayly
+--     @freq_interval = 1, -- 1 day
+--     @freq_subday_type = 4, -- minutes
+--     @freq_subday_interval = 5; -- 5 minutes
+
+-- go
+-- execute sp_attach_schedule
+--     @job_name = 'Add funds to savings accounts',
+--     @schedule_name = 'Every5Minutes';
+-- go
+-- execute sp_add_jobserver @job_name = 'Add funds to savings accounts';
+-- go
+-- execute sp_start_job 'Add funds to savings accounts';
+-- go
+-- use egg_bank;
+-- go
 
 go
-execute sp_attach_schedule
-    @job_name = 'Add funds to savings accounts',
-    @schedule_name = 'Every5Minutes';
-go
-execute sp_add_jobserver @job_name = 'Add funds to savings accounts';
-go
-execute sp_start_job 'Add funds to savings accounts';
-go
-use egg_bank;
-go
 
-go
+if exists(
+    select * from master.sys.server_principals
+        where name = 'db_user' and type = 'S'
+) begin
+    drop login db_user;
+end
+if exists(
+    select * from sys.database_principals
+        where name = 'db_user' and type = 'S'
+) begin
+    drop user db_user;
+end
+create login db_user with password = 'S3cret.P4ssword';
+create user db_user for login db_user;
 
--- insert into users (name, password) values ('karel', 'karel');
--- execute open_account 3, 'Karluv super ucet', 'basic', 0;
--- execute open_account 3, 'Karluv sporici ucet', 'savings', 0;
--- execute add_funds 2, 1000;
--- execute add_funds 3, 500;
+-- tables
+deny alter, delete on log to db_user;
+deny alter, insert, update, delete on log_msg_type to db_user;
+grant alter, select, insert, delete on users to db_user;
+grant alter, select, insert, delete on account to db_user;
+grant alter, select, insert, delete on payment to db_user;
+grant select, insert on log to db_user;
+grant select on log_msg_type to db_user;
+
+-- views
+deny alter on interest to db_user;
+deny alter on users_with_total_balance to db_user;
+deny alter on users_without_accounts to db_user;
+grant select on interest to db_user;
+grant select on users_with_total_balance to db_user;
+grant select on users_without_accounts to db_user;
+
+-- procedures
+deny alter on auth_user to db_user;
+deny alter on transfer to db_user;
+deny alter on add_funds to db_user;
+deny alter on open_account to db_user;
+deny alter on add_interest to db_user;
+grant execute on auth_user to db_user;
+grant execute on transfer to db_user;
+grant execute on add_funds to db_user;
+grant execute on open_account to db_user;
+grant execute on add_interest to db_user;
 
 go

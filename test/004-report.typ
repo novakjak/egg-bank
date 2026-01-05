@@ -32,30 +32,31 @@
 )
 
 = Steps
++ Open main page at `http://localhost:5173` in a web browser.
 + Log in as user `admin` with password `Hunter12`.
 + Note down the information in the _Statistics_ section.
 + Log out.
 + Create a new user.
-+ Log out of new user.
++ Log out of the new user.
 + Log back in as `admin`.
-+ Notice that _Total user count_ has increased.
-+ Log out of admin account.
++ Confirm that _Total user count_ has increased.
++ Log out of `admin`.
 + Log back in as your created user.
 + Open several new accounts.
 + Log out of your user.
-+ Log back in as admin.
-+ Notice that `Total account count` has increased.
-+ Notice that `Total balance` has increased due to your user receiving a bonus
++ Log back in as `admin`.
++ Confirm that `Total account count` has increased.
++ Confirm that `Total balance` has increased due to your user receiving a bonus
   for opening their first account.
-+ Log out of admin account.
++ Log out of `admin`.
 + Log back in as your created user.
 + Create a new transaction.
 + Log out of your user.
-+ Log back in as admin.
-+ Notice that `Total payment count` has increased.
-+ Notice that `Total balance transferred` has increased.
++ Log back in as `admin`.
++ Confirm that `Total payment count` has increased.
++ Confirm that `Total balance transferred` has increased.
   - Note that depending on how long the testing will take `Total balance transsfered`
     can increase by a higher value that the one you have specified during the transaction.
     That is due to interest being paid out.
-+ Notice that unless interest was paid out `Total balance` did not change.
++ Confirm that unless interest was paid out `Total balance` did not change.
   - You can check wether any interest was paid out in the log. (There should be a message saying _added interest_.)

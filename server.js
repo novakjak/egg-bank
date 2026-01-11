@@ -20,8 +20,9 @@ const viteServer = await import("vite").then((vite) =>
 const db = await viteServer.ssrLoadModule("./app/database.server.ts");
 try {
   await db.Db.instance();
+  console.log("Connected to database.");
 } catch (e) {
-  console.log(`Could not connect to server: ${e.message}`);
+  console.log(`Could not connect to database: ${e.message}`);
   process.exit(1);
 }
 

@@ -1,13 +1,25 @@
-drop database if exists egg_bank;
-go
-create database egg_bank collate Latin1_General_CS_AS_KS_WS;
-go
-use egg_bank;
+-- Database creation script cannot be in a transaction because
+-- T-SQL does not allow for multiple batches to be in a single
+-- transaction. Batches are required because of creating views,
+-- procedures and triggers.
 
+if DB_NAME() <> 'novak17' begin
+    drop database if exists egg_bank;
+    create database egg_bank collate Latin1_General_CS_AS_KS_WS;
+    use egg_bank;
+end
+
+go
+
+drop table if exists payment;
+drop table if exists account;
+drop table if exists users;
+drop table if exists log;
+drop table if exists log_msg_type;
 create table users (
     id int identity(1,1) primary key,
-    name varchar(50) not null unique,
-    password varchar(50) not null,
+    name varchar(50) collate Latin1_General_CS_AS_KS_WS not null unique,
+    password varchar(50) collate Latin1_General_CS_AS_KS_WS not null,
     admin bit not null default(0),
 );
 
@@ -15,16 +27,16 @@ create table account (
     id int identity(1,1) primary key,
     user_id int foreign key references users(id) not null,
     number int not null check(number > 0),
-    name varchar(50) not null,
-    type varchar(30) not null default('basic') check(type in ('basic', 'savings')),
-    status varchar(15) not null check(status in ('active', 'disabled')),
+    name varchar(50) collate Latin1_General_CS_AS_KS_WS not null,
+    type varchar(30) collate Latin1_General_CS_AS_KS_WS not null default('basic') check(type in ('basic', 'savings')),
+    status varchar(15) collate Latin1_General_CS_AS_KS_WS not null check(status in ('active', 'disabled')),
     balance decimal(38, 3) not null default(0.0),
 );
 
 create table payment (
     id int identity(1,1) primary key,
     timestamp datetime not null default(getdate()),
-    description varchar(50) null,
+    description varchar(50) collate Latin1_General_CS_AS_KS_WS null,
     from_acc int foreign key references account(id) not null,
     to_acc int foreign key references account(id) not null,
     amount decimal(38, 3) not null check(amount > 0),
@@ -32,29 +44,31 @@ create table payment (
 
 create table log_msg_type (
     id int identity(1,1) primary key,
-    type varchar(30) not null unique,
+    type varchar(30) collate Latin1_General_CS_AS_KS_WS not null unique,
 );
 
 create table log (
     id int identity(1,1) primary key,
     timestamp datetime not null default(getdate()),
     type int foreign key references log_msg_type(id) not null,
-    message varchar(80) not null,
+    message varchar(80) collate Latin1_General_CS_AS_KS_WS not null,
     user_id int null default(null),
     account int null default(null),
 );
 
 go
 
-create view interest as select id, balance * 0.005 as interest from account where type = 'savings' and status = 'active';
+create or alter view interest
+    as select id, balance * 0.005 as interest
+        from account where type = 'savings' and status = 'active';
 go
-create view users_with_total_balance
+create or alter view users_with_total_balance
     as select u.id, u.name, sum(a.balance) as total_balance
         from users u
         inner join account a on a.user_id = u.id
         group by u.id, u.name;
 go
-create view users_without_accounts
+create or alter view users_without_accounts
     as select u.id, u.name
         from users u
         left join account a on a.user_id = u.id
@@ -245,50 +259,52 @@ go
 -- use egg_bank;
 -- go
 
-go
 
-if exists(
-    select * from master.sys.server_principals
-        where name = 'db_user' and type = 'S'
-) begin
-    drop login db_user;
+if DB_NAME() <> 'novak17' begin
+    if exists(
+        select * from master.sys.server_principals
+            where name = 'db_user' and type = 'S'
+    ) begin
+        drop login db_user;
+    end
+    if exists(
+        select * from sys.database_principals
+            where name = 'db_user' and type = 'S'
+    ) begin
+        drop user db_user;
+    end
+    create login db_user with password = 'S3cret.P4ssword';
+    create user db_user for login db_user;
+
+    -- tables
+    deny alter, delete on log to db_user;
+    deny alter, insert, update, delete on log_msg_type to db_user;
+    grant alter, select, insert, delete on users to db_user;
+    grant alter, select, insert, delete on account to db_user;
+    grant alter, select, insert, delete on payment to db_user;
+    grant select, insert on log to db_user;
+    grant select on log_msg_type to db_user;
+
+    -- views
+    deny alter on interest to db_user;
+    deny alter on users_with_total_balance to db_user;
+    deny alter on users_without_accounts to db_user;
+    grant select on interest to db_user;
+    grant select on users_with_total_balance to db_user;
+    grant select on users_without_accounts to db_user;
+
+    -- procedures
+    deny alter on auth_user to db_user;
+    deny alter on transfer to db_user;
+    deny alter on add_funds to db_user;
+    deny alter on open_account to db_user;
+    deny alter on add_interest to db_user;
+    grant execute on auth_user to db_user;
+    grant execute on transfer to db_user;
+    grant execute on add_funds to db_user;
+    grant execute on open_account to db_user;
+    grant execute on add_interest to db_user;
+
 end
-if exists(
-    select * from sys.database_principals
-        where name = 'db_user' and type = 'S'
-) begin
-    drop user db_user;
-end
-create login db_user with password = 'S3cret.P4ssword';
-create user db_user for login db_user;
-
--- tables
-deny alter, delete on log to db_user;
-deny alter, insert, update, delete on log_msg_type to db_user;
-grant alter, select, insert, delete on users to db_user;
-grant alter, select, insert, delete on account to db_user;
-grant alter, select, insert, delete on payment to db_user;
-grant select, insert on log to db_user;
-grant select on log_msg_type to db_user;
-
--- views
-deny alter on interest to db_user;
-deny alter on users_with_total_balance to db_user;
-deny alter on users_without_accounts to db_user;
-grant select on interest to db_user;
-grant select on users_with_total_balance to db_user;
-grant select on users_without_accounts to db_user;
-
--- procedures
-deny alter on auth_user to db_user;
-deny alter on transfer to db_user;
-deny alter on add_funds to db_user;
-deny alter on open_account to db_user;
-deny alter on add_interest to db_user;
-grant execute on auth_user to db_user;
-grant execute on transfer to db_user;
-grant execute on add_funds to db_user;
-grant execute on open_account to db_user;
-grant execute on add_interest to db_user;
 
 go

@@ -5,16 +5,16 @@ export class Db {
   pool: pkg.ConnectionPool;
 
   private constructor() {
-    this.pool = new pkg.ConnectionPool({
-      user: process.env.DATABASE_USER ?? 'sa',
-      password: process.env.DATABASE_PASSWORD ?? 'Hunter12',
-      server: process.env.DATABASE_SERVER ?? 'localhost',
-      database: process.env.DATABASE ?? 'egg_bank',
-      port: +(process.env.DATABASE_PORT ?? 1433),
-      options: {
-        trustServerCertificate: (process.env.TRUSTSERVERCERTIFICATE?.toLowerCase() ?? 'true') === 'true' ,
-      }
-    });
+    const connection_string = (
+      `Server=${process.env.DATABASE_SERVER ?? 'localhost'}${process.env.DATABASE_PORT ? ',' + process.env.DATABASE_PORT : ''};`
+      + `Database=${process.env.DATABASE ?? 'egg_bank'};`
+      + `User ID=${process.env.DATABASE_USER ?? 'db_user'};`
+      + `Password=${process.env.DATABASE_PASSWORD  ?? 'S3cret.P4ssword'};`
+      + `TrustServerCertificate=${process.env.TRUSTSERVERCERTIFICATE ?? 'yes'};`
+      + `Encrypt=${process.env.DB_ENCRYPT ?? 'yes'};`
+      + `Timeout=${process.env.DB_TIMEOUT ?? '3'}`
+    );
+    this.pool = new pkg.ConnectionPool(connection_string);
   }
 
   private static async create(): Promise<Db> {

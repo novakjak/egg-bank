@@ -31,31 +31,21 @@
 )
 
 = Steps
-+ Connect to Microsoft SQL Server using SQL Server Management Studio as the system administrator (sa).
-+ Start the SQL Server Agent service if it is not running.
-  - See https://database.guide/enable-sql-server-agent-via-ssms/ for a guide.
-+ Create a new query.
-+ Paste script within `database.sql` into the newly created query.
-+ Confirm that the table definitions in the query contain colums with types `decimal`, `bit`, `varchar`, `datetime`
-  and that some columns have a check constraint in the form of `check(<column> in ('<str1>', '<str2>', ...))`.
-+ Confirm that the `payment` table contains at least two foreign keys referencing one table.
-  - These are written as `foreign key references <table>(id)`.
-+ Confirm that there exist at least two view definitions in the form of `create view <view_name> ...`.
-+ Confirm that transactions are used.
-  - Transactions are denoted with `begin transaction`, `commit transactions` and `rollback`.
-+ Execute query.
-+ Reload `Databases` in _Object Explorer_.
-+ Confirm that a database named `egg_bank` was created.
-+ Confirm that the databae contains tables `users`, `account`, `payment`, `log` and `log_msg_type`.
-+ Install dependencies by executing `npm install` in a console in the project directory.
 + Update configuration options in the `.env` file in project root directory.
   - See _README.md_ for configuration options.
-  - The only option that will probably need to be changed is `DATABASE_SERVER`.
+  - Set server to `tcp:193.85.203.188`.
+  - Set user to `novak17`.
+  - Set password to `databaze`.
+  - Set database to `novak17`.
+  - Set port to `1433`.
+  - Set TrustServerCertificate to `yes`.
+  - Set encryption to `no`.
++ Install dependencies by executing `npm install` in a console in the project directory.
 + Run the server by executing `npm run dev` in a console in the project directory.
 + Confirm that the server started successfully by opening the address `http://localhost:5173`
   in a web browser.
-+ Change configuration to something incorrect and try to restart server.
-  - Server can be stopped by pressing CTRL-C.
++ Stop the server by pressing CTRL-C in the console window.
++ Change configuration in `.env` to something incorrect and try to restart server.
 + Confirm that server does not start and prints an error message to the command line.
 + Change configuration back to the correct settings.
 + Open Web UI in a browser at the address `http://localhost:5173`.
